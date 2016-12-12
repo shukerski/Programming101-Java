@@ -1,0 +1,1 @@
+The [Arr.java](https://github.com/shukerski/Programming101-Java/blob/master/week01/thursday/Arr.java) file is my solution to the [StaticArrays](https://github.com/HackBulgaria/Programming101-Java-2016/tree/master/week01/StaticArrays) problem.
