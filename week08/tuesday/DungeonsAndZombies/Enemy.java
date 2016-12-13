@@ -2,8 +2,16 @@ package com.week08.tuesday.DungeonsAndZombies;
 
 public class Enemy extends Entity{
 	
-	int initialDamage;
+	private int initialDamage;
 	
+	public int getInitialDamage() {
+		return initialDamage;
+	}
+
+	public void setInitialDamage(int initialDamage) {
+		this.initialDamage = initialDamage;
+	}
+
 	public Enemy(int health, int mana, int damage) {
 		super(health, mana);
 		initialDamage = damage;

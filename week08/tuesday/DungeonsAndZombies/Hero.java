@@ -1,10 +1,10 @@
 package com.week08.tuesday.DungeonsAndZombies;
 
 public class Hero extends Entity{
-	String name;
-	String title;
+	private String name;
+	private String title;
 	
-	int manaRegenRate;
+	private int manaRegenRate;
 
 	public Hero(String name, String title, int health, int mana, int manaRegenRate) {
 		super(health, mana);
