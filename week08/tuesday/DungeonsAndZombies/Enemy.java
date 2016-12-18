@@ -23,10 +23,10 @@ public class Enemy extends Entity{
 			return initialDamage;
 		}
 		if(damageDealer.equals("weapon")) {
-			return currentWeapon.damage;
+			return currentWeapon.getDamage();
 		} else {
-			this.loseMana(currentSpell.manaCost);
-			return currentSpell.damage;
+			this.loseMana(currentSpell.getManaCost());
+			return currentSpell.getDamage();
 		}
 	}
 

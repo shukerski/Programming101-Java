@@ -9,8 +9,28 @@ public class Main {
 
 		h.equip(w);
 
-		System.out.println(h.attack("weapon"));
+//		System.out.println(h.attack("weapon"));
+		
+		String[][] map = {
+				{".",".","#","#",".",".",".",".",".","T"},
+				{"#","T","#","#",".",".","#","#","#","."},
+				{"#",".","#","#","#","E","#","#","#","E"},
+				{"#",".","#",".",".",".","#","#","#","."},
+				{"#","#","#","T","#","#","#","#","#","G"} };
+		Dungeon d = new Dungeon(map, h);
+//		Position position = d.getFirstAvailavblePosition();
+		d.spawn(h);
+		d.printMap();
 
+//		System.out.println(position.x + " " + position.y);
+//		System.out.println(map[position.x][position.y]);
+		
 	}
+	
 
+	
+	
+			
+			
+			
 }

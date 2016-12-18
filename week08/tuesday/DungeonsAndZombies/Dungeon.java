@@ -20,7 +20,7 @@ package com.week08.tuesday.DungeonsAndZombies;
 public class Dungeon {
 	private String[][] map;
 	private Hero hero;
-	private Position heroPosition;
+	
 	
 	public Dungeon(String[][] map, Hero hero) {
 		this.map = map;
@@ -37,22 +37,46 @@ public class Dungeon {
 		}
 		System.out.println();
 	}
+
+//	public Position getFirstAvailavblePosition() {
+//		Position result = new Position(0,0);
+//		for(int i = 0; i < map.length; i++) {
+//			for(int j = 0; j < map[i].length; j++) {
+//				if(map[i][j].equals(".")) {
+//					result.x = i;
+//					result.y = j;
+//					break;
+//				}
+//			}
+//		}
+//		return result;
+//	}
 	
-	public Position getFirstAvailavblePosition() {
-		Position result = new Position(0,0);
-		for(int i = 0; i < map.length; i++) {
-			for(int j = 0; j < map[i].length; j++) {
-				if(map[i][j].equals(".")) {
-					result.x = i;
-					result.y = j;
-					break;
-				}
-			}
-		}
-		return result;
+	public boolean spawn(Hero hero) { // it can return the position at which the hero is spawned
+		this.hero = hero;
+		Position availablePosition = new Position(0, 0);
+		this.hero.setPosition(availablePosition);
+		map[hero.getXPosition()][hero.getYPosition()] = "H";
+		return true;
 	}
 	
-//	public boolean spawn(Hero hero) {
-//		
-//	}
+	public void moveHero(String direction) {
+		switch (direction) {
+		case "down":
+			//some code
+			break;
+		case "up":
+			// some code
+			break;
+		case "left":
+			// some code
+			break;
+		case "right":
+			// some code
+			break;
+
+		default:
+			break;
+		}
+	}
 }

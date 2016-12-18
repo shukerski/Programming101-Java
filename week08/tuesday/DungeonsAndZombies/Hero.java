@@ -3,8 +3,24 @@ package com.week08.tuesday.DungeonsAndZombies;
 public class Hero extends Entity{
 	private String name;
 	private String title;
-	
+	private Position position;
 	private int manaRegenRate;
+	
+	public Position getPosition() {
+		return position;
+	}
+	
+	public int getXPosition() {
+		return position.x;
+	}
+	
+	public int getYPosition() {
+		return position.y;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
 
 	public Hero(String name, String title, int health, int mana, int manaRegenRate) {
 		super(health, mana);
@@ -32,11 +48,10 @@ public class Hero extends Entity{
 		}
 		
 		if(damageDealer.equals("weapon")) {
-//			System.out.println("Attacking with weapon");
-			return currentWeapon.damage;
+			return currentWeapon.getDamage();
 		} else {
-			this.loseMana(currentSpell.manaCost);
-			return currentSpell.damage;
+			this.loseMana(currentSpell.getManaCost());
+			return currentSpell.getDamage();
 		}
 	}
 	
