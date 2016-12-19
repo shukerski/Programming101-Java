@@ -1,0 +1,3 @@
+Healing potion,50,0
+Mana potion,0,50
+Rejuvenation,100,100
