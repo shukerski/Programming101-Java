@@ -12,19 +12,19 @@ public class Main {
 //		System.out.println(h.attack("weapon"));
 		
 		String[][] map = {
-				{".",".","#","#",".",".",".",".",".","T"},
+				{"S",".","#","#",".",".",".",".",".","T"},
 				{"#","T","#","#",".",".","#","#","#","."},
 				{"#",".","#","#","#","E","#","#","#","E"},
 				{"#",".","#",".",".",".","#","#","#","."},
 				{"#","#","#","T","#","#","#","#","#","G"} };
 		Dungeon d = new Dungeon(map, h);
-//		Position position = d.getFirstAvailavblePosition();
+		
 		d.spawn(h);
 		d.printMap();
+		d.moveHero("down");
 
 //		System.out.println(position.x + " " + position.y);
 //		System.out.println(map[position.x][position.y]);
-		
 	}
 	
 
