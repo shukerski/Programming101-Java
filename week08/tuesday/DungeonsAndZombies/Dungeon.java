@@ -163,7 +163,7 @@ public class Dungeon {
 			System.out.println("Do you want the new weapon you found? y/n");
 			response = scanner.nextLine();
 			if(response.equals("y") || response.equals("yes")) {
-				hero.equals(weapon);
+				hero.equip(weapon);
 				System.out.println(weapon.getName() + " equipped");
 			}
 			break;
@@ -191,35 +191,191 @@ public class Dungeon {
 			}
 			break;
 		}
-		scanner.close();
+//		scanner.close(); if I close it there's no way to input in main because I close System.in
+	}
+	
+	public static void startFight(Hero hero, Enemy enemy) {
+		System.out.println("A fight has started!");
+		while(true) {
+			// Hero attacks
+			if(hero.getCurrentWeapon() != null && hero.getCurrentSpell() != null) {
+				if( ( hero.getCurrentWeapon().getDamage() < hero.getCurrentSpell().getDamage() ) && (hero.getCurrentMana() >= hero.getCurrentSpell().getManaCost()) ) { // attack with spell
+					System.out.println(hero.knownAs() + " casts a spell " + hero.getCurrentSpell().getName() + " dealing " + hero.getCurrentSpell().getDamage() + " damage");
+					hero.loseMana(hero.getCurrentSpell().getManaCost());
+					System.out.println(hero.knownAs() + " 's mana is now " + hero.getMana());
+					enemy.takeDamage(hero.attack("spell"));
+					System.out.println("Enemy's health is now " + enemy.getCurrentHealth());
+					System.out.println();
+				} else { // attack with weapon
+					System.out.println(hero.knownAs() + " attacks with " + hero.getCurrentWeapon().getName() + " dealing " + hero.getCurrentWeapon().getDamage() + " damage");
+					enemy.takeDamage(hero.attack("weapon"));
+					System.out.println("Enemy's health is now " + enemy.getCurrentHealth());
+					System.out.println();
+
+				}
+			} else if(hero.getCurrentSpell() == null && hero.getCurrentWeapon() != null) {
+				System.out.println(hero.knownAs() + " attacks with " + hero.getCurrentWeapon().getName() + " dealing " + hero.getCurrentWeapon().getDamage() + " damage");
+				enemy.takeDamage(hero.attack("weapon"));
+				System.out.println("Enemy's health is now " + enemy.getCurrentHealth());
+				System.out.println();
+			} else if(hero.getCurrentSpell() != null && hero.getCurrentWeapon() == null) {
+				System.out.println(hero.knownAs() + " casts a spell " + hero.getCurrentSpell().getName() + " dealing " + hero.getCurrentSpell().getDamage() + " damage");
+				hero.loseMana(hero.getCurrentSpell().getManaCost());
+				System.out.println(hero.knownAs() + " 's mana is now " + hero.getMana());
+				enemy.takeDamage(hero.attack("spell"));
+				System.out.println("Enemy's health is now " + enemy.getCurrentHealth());
+				System.out.println();
+			} else {
+				System.out.println("You can't fight. You have no skills.");
+				System.out.println();
+			}
+			
+			if(!enemy.isAlive()) {
+				System.out.println("You killed your enemy! Continue forward my son!");
+				System.out.println();
+				return;
+			}
+			
+			// Enemy is still alive and it is his turn to attack
+			if(enemy.getCurrentWeapon() != null && enemy.getCurrentSpell() != null) {
+				if( ( enemy.getCurrentWeapon().getDamage() < enemy.getCurrentSpell().getDamage() ) && (enemy.getCurrentMana() >= enemy.getCurrentSpell().getManaCost()) ) { // attack with spell
+					System.out.println("The enemy casts a spell " + enemy.getCurrentSpell().getName() + " dealing " + enemy.getCurrentSpell().getDamage() + " damage");
+					enemy.loseMana(enemy.getCurrentSpell().getManaCost());
+					System.out.println("Enemy's mana is now " + enemy.getCurrentMana());
+					hero.takeDamage(enemy.attack("spell"));
+					System.out.println(hero.knownAs() + "'s health is now " + hero.getCurrentHealth());
+					System.out.println();
+				} else { // attack with weapon
+					System.out.println("Enemy attacks with " + enemy.getCurrentWeapon().getName() + " dealing " + enemy.getCurrentWeapon().getDamage() + " damage");
+					hero.takeDamage(enemy.attack("weapon"));
+					System.out.println(hero.knownAs() + " 's health is now " + hero.getCurrentHealth());
+					System.out.println();
+
+				}
+			} else if(enemy.getCurrentSpell() == null && enemy.getCurrentWeapon() != null) {
+				System.out.println("Enemy attacks with " + enemy.getCurrentWeapon().getName() + " dealing " + enemy.getCurrentWeapon().getDamage() + " damage");
+				hero.takeDamage(enemy.attack("weapon"));
+				System.out.println(hero.knownAs() + " 's health is now " + hero.getCurrentHealth());
+				System.out.println();
+
+			} else if(enemy.getCurrentSpell() != null && enemy.getCurrentWeapon() == null) {
+				System.out.println("The enemy casts a spell " + enemy.getCurrentSpell().getName() + " dealing " + enemy.getCurrentSpell().getDamage() + " damage");
+				enemy.loseMana(enemy.getCurrentSpell().getManaCost());
+				System.out.println("Enemy's mana is now " + enemy.getCurrentMana());
+				hero.takeDamage(enemy.attack("spell"));
+				System.out.println(hero.knownAs() + "'s health is now " + hero.getCurrentHealth());
+				System.out.println();
+			} else {
+				System.out.println("Enemy bashes you in the head dealing " + enemy.getInitialDamage() + " damage");
+				hero.takeDamage(enemy.getInitialDamage());
+				System.out.println();
+			}
+			
+			if(!hero.isAlive()) {
+				System.out.println("You are dead!");
+				System.out.println();
+				return;
+			}
+		}
 	}
 	
 	public void moveHero(String direction) {
 		switch (direction) {
 		case "down":
-			if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("#")) {
-				System.out.println("You can't move down! There is an obsticle!");
-			}
 			if(heroPosition.getX() + 1 >= map.length) {
 				System.out.println("You're trying to step into the unknown!");
-			}
-			if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("T")) {
-				Random rand = new Random();
-				int n = rand.nextInt(3);
-				pickTreasure(n);
-			}
-			if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("E")) {
-				//TODO fight starts
+			} else if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("#")) {
+					System.out.println("You can't move down! There is an obsticle!");
+			} else {
+				if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("T")) {
+					Random rand = new Random();
+					int n = rand.nextInt(3);
+					pickTreasure(n);
+				}
+				if(map[heroPosition.getX() + 1][heroPosition.getY()].equals("E")) {
+					Enemy enemy = new Enemy(100, 100, 10);
+					enemy.setCurrentWeapon(pickWeapon("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/weapons.txt"));
+					enemy.setCurrentSpell(pickSpell("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/spells.txt"));
+					startFight(hero, enemy);
+				}
+				// update hero position
+				map[heroPosition.getX()][heroPosition.getY()] = ".";
+				heroPosition.setX(heroPosition.getX() + 1);
+				hero.takeMana(hero.getManaRegenRate());
+				map[heroPosition.getX()][heroPosition.getY()] = "H";
 			}
 			break;
 		case "up":
-			// some code
+			if(heroPosition.getX() - 1 < 0) {
+				System.out.println("You're trying to step into the unknown!");
+			} else if(map[heroPosition.getX() - 1][heroPosition.getY()].equals("#")) {
+					System.out.println("You can't move up! There is an obsticle!");
+			} else {
+				if(map[heroPosition.getX() - 1][heroPosition.getY()].equals("T")) {
+					Random rand = new Random();
+					int n = rand.nextInt(3);
+					pickTreasure(n);
+				}
+				if(map[heroPosition.getX() - 1][heroPosition.getY()].equals("E")) {
+					Enemy enemy = new Enemy(100, 100, 10);
+					enemy.setCurrentWeapon(pickWeapon("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/weapons.txt"));
+					enemy.setCurrentSpell(pickSpell("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/spells.txt"));
+					startFight(hero, enemy);
+				}
+				// update hero position
+				map[heroPosition.getX()][heroPosition.getY()] = ".";
+				heroPosition.setX(heroPosition.getX() - 1);
+				hero.takeMana(hero.getManaRegenRate());
+				map[heroPosition.getX()][heroPosition.getY()] = "H";
+			}
 			break;
 		case "left":
-			// some code
+			if(heroPosition.getY() - 1 < 0) {
+				System.out.println("You're trying to step into the unknown!");
+			} else if(map[heroPosition.getX()][heroPosition.getY() - 1].equals("#")) {
+					System.out.println("You can't move left! There is an obsticle!");
+			} else {
+				if(map[heroPosition.getX()][heroPosition.getY() - 1].equals("T")) {
+					Random rand = new Random();
+					int n = rand.nextInt(3);
+					pickTreasure(n);
+				}
+				if(map[heroPosition.getX()][heroPosition.getY() - 1].equals("E")) {
+					Enemy enemy = new Enemy(100, 100, 10);
+					enemy.setCurrentWeapon(pickWeapon("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/weapons.txt"));
+					enemy.setCurrentSpell(pickSpell("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/spells.txt"));
+					startFight(hero, enemy);
+				}
+				// update hero position
+				map[heroPosition.getX()][heroPosition.getY()] = ".";
+				heroPosition.setY(heroPosition.getY() - 1);
+				hero.takeMana(hero.getManaRegenRate());
+				map[heroPosition.getX()][heroPosition.getY()] = "H";
+			}
 			break;
 		case "right":
-			// some code
+			if(heroPosition.getY() + 1 >= map[heroPosition.getX()].length) {
+				System.out.println("You're trying to step into the unknown!");
+			} else if(map[heroPosition.getX()][heroPosition.getY() + 1].equals("#")) {
+					System.out.println("You can't move right! There is an obsticle!");
+			} else {
+				if(map[heroPosition.getX()][heroPosition.getY() + 1].equals("T")) {
+					Random rand = new Random();
+					int n = rand.nextInt(3);
+					pickTreasure(n);
+				}
+				if(map[heroPosition.getX()][heroPosition.getY() + 1].equals("E")) {
+					Enemy enemy = new Enemy(100, 100, 10);
+					enemy.setCurrentWeapon(pickWeapon("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/weapons.txt"));
+					enemy.setCurrentSpell(pickSpell("/home/dimitar/Coding/HackBulgaria/Programming101Java/src/com/week08/tuesday/DungeonsAndZombies/Levels/1/Treasures/spells.txt"));
+					startFight(hero, enemy);
+				}
+				// update hero position
+				map[heroPosition.getX()][heroPosition.getY()] = ".";
+				heroPosition.setY(heroPosition.getY() + 1);
+				hero.takeMana(hero.getManaRegenRate());
+				map[heroPosition.getX()][heroPosition.getY()] = "H";
+			}
 			break;
 		}
 	}

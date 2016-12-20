@@ -1,3 +1,3 @@
 Razor of Unholy Might,30
 Faithkeeper,20
-Cleaver of Shadow Strikes
+Cleaver of Shadow Strikes,40

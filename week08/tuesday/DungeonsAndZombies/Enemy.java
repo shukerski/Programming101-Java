@@ -4,6 +4,11 @@ public class Enemy extends Entity{
 	
 	private int initialDamage;
 	
+	public Enemy(int health, int mana, int damage) {
+		super(health, mana);
+		initialDamage = damage;
+	}
+	
 	public int getInitialDamage() {
 		return initialDamage;
 	}
@@ -12,10 +17,6 @@ public class Enemy extends Entity{
 		this.initialDamage = initialDamage;
 	}
 
-	public Enemy(int health, int mana, int damage) {
-		super(health, mana);
-		initialDamage = damage;
-	}
 
 	@Override
 	public int attack(String damageDealer) {
@@ -25,7 +26,6 @@ public class Enemy extends Entity{
 		if(damageDealer.equals("weapon")) {
 			return currentWeapon.getDamage();
 		} else {
-			this.loseMana(currentSpell.getManaCost());
 			return currentSpell.getDamage();
 		}
 	}
